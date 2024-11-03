@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Equipo Esterilizado</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='esterilizacion.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <h1>MEDITRACK</h1>
+            <div class="user-menu">
+                <img src="{{ url_for('static', filename='profile.png') }}" alt="Usuario" class="user-image">
+                <div class="dropdown">
+                    <span class="user-role">{{ session['role'] }} ▼</span>
+                    <div class="dropdown-content">
+                        <span>{{ session['username'] }}</span>
+                        <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <aside class="sidebar">
+        <ul>
+            <li><a href="{{ url_for('home') }}">Inicio</a></li>
+            <li><a href="{{ url_for('bd_usuarios') }}">BD Usuarios</a></li>
+            <li><a href="{{ url_for('inventario') }}">Inventario</a></li>
+            <li><a href="{{ url_for('esterilizacion') }}">Esterilización</a></li>
+            <li><a href="{{ url_for('busqueda_esterilizacion') }}">Búsqueda</a></li>
+            <li><a href="#">Atrás</a></li>
+        </ul>
+    </aside>
+
+    <main class="content">
+        <div class="content-container" style="width: 70%; margin: auto;">
+            <h2 class="page-title">Equipo Esterilizado</h2>
+            {% if alerta %}
+            <div class="alert alert-warning" style="background-color: #f8d7da; color: #721c24; padding: 10px; border: 1px solid #f5c6cb; border-radius: 5px; margin-bottom: 15px;">
+                {{ alerta }}
+            </div>
+            {% endif %}
+            <div class="team-info-container">
+                <!-- Imagen del equipo -->
+                <div class="image-container">
+                    <img src="{{ url_for('static', filename='equipment.png') }}" alt="Imagen del equipo" class="equipment-image">
+                </div>
+                <!-- Tabla de información -->
+                <div class="info-table">
+                    <table>
+                        <tr>
+                            <td><strong>No. Identificación DM:</strong></td>
+                            <td>{{ identificacion_dm }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>No. Lote:</strong></td>
+                            <td>{{ lote }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Nombre del equipo:</strong></td>
+                            <td>{{ nombre_dm }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Persona que esteriliza:</strong></td>
+                            <td>{{ persona_esteriliza }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fecha:</strong></td>
+                            <td>{{ fecha }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Hora:</strong></td>
+                            <td>{{ hora }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ciclos:</strong></td>
+                            <td>{{ ciclos }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cantidad de Piezas:</strong></td>
+                            <td>{{ cantidad_piezas }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Esterilizador:</strong></td>
+                            <td>{{ esterilizador }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fecha de Vencimiento:</strong></td>
+                            <td>{{ fecha_vencimiento }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cantidad de Esterilizaciones:</strong></td>
+                            <td>{{ cantidad_esterilizaciones }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cantidad de Usos:</strong></td>
+                            <td>{{ cantidad_usos }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Número de Usos Permitidas:</strong></td>
+                            <td>{{ numero_reusos_permitida }}</td>
+                        </tr>                        
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </main>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>

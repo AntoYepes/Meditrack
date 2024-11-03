@@ -1,0 +1,82 @@
+identificacion,lote,nombre_dm,fabricante,dispositivo_medico,numero_reusos,numero_esterilizacion,metodo_esterilizacion,fecha_compra,cantidad_piezas,esterilizador,fecha_vencimiento
+ID-100,L-5523,Manguera de Oxígeno,Plasti-med,Filtro,4,3,Esterilización por Óxido de Etileno,26/05/2023,1.0,Autoclave,12/06/2024
+ID-101,L-5681,Sonda de Alimentación,SURTEX,Tubo,3,2,Esterilización por Óxido de Etileno,28/10/2023,1.0,Autoclave,30/06/2026
+ID-102,L-4863,Sensor de Presión,SunMed,Filtro,2,1,Esterilización por Autoclave,02/12/2023,1.0,Autoclave,03/06/2026
+ID-103,L-1601,Manguera de Oxígeno,SURTEX,Retractor,2,1,Esterilización por Plasma,10/11/2023,1.0,Autoclave,26/11/2025
+ID-104,L-8279,Sonda de Alimentación,SURTEX,Pinza,4,3,Esterilización por Autoclave,25/05/2023,1.0,Autoclave,07/08/2025
+ID-105,L-6837,Sensor de Presión,SURTEX,Retractor,4,3,Esterilización por Óxido de Etileno,14/05/2023,1.0,Autoclave,01/05/2026
+ID-106,L-4568,Válvula de Control,SURTEX,Retractor,5,4,Esterilización por Autoclave,03/06/2023,1.0,Autoclave,28/09/2024
+ID-107,L-6124,Pinza Quirúrgica,SURTEX,Retractor,2,1,Esterilización por Plasma,12/07/2023,1.0,Autoclave,13/07/2025
+ID-108,L-9136,Manguera de Oxígeno,SURTEX,Pinza,2,1,Esterilización por Autoclave,05/08/2023,1.0,Autoclave,27/06/2025
+ID-109,L-9044,Sonda de Alimentación,SURTEX,Pinza,3,2,Esterilización por Autoclave,04/11/2023,1.0,Autoclave,20/05/2025
+ID-110,L-3348,Catéter Central,SURTEX,Tijera,3,2,Esterilización por Óxido de Etileno,17/04/2023,1.0,Autoclave,23/09/2024
+ID-111,L-9409,Tubo de Drenaje,SURTEX,Retractor,3,2,Esterilización por Plasma,26/02/2023,1.0,Autoclave,17/09/2025
+ID-112,L-8777,Sonda de Alimentación,SURTEX,Bisturi,2,1,Esterilización por Plasma,20/02/2023,1.0,Autoclave,28/07/2024
+ID-113,L-9495,Válvula de Control,SURTEX,Pinza,5,4,Esterilización por Autoclave,30/03/2023,1.0,Autoclave,17/05/2025
+ID-114,L-1293,Catéter Central,SURTEX,Pasador,4,3,Esterilización por Óxido de Etileno,25/08/2023,1.0,Autoclave,07/02/2025
+ID-115,L-8975,Electrodo ECG,SURTEX,Retractor,5,4,Esterilización por Plasma,16/03/2023,1.0,Autoclave,02/12/2024
+ID-116,L-6482,Máscara de Ventilación,SURTEX,Pinza,5,4,Esterilización por Plasma,13/02/2023,1.0,Autoclave,02/09/2025
+ID-117,L-8036,Pinza Quirúrgica,SURTEX,Pinza,3,2,Esterilización por Óxido de Etileno,16/03/2023,1.0,Autoclave,29/06/2025
+ID-118,L-2911,Pinza Quirúrgica,SURTEX,Pasador,2,1,Esterilización por Óxido de Etileno,26/10/2023,1.0,Autoclave,22/10/2026
+ID-119,L-7039,Sonda de Alimentación,SURTEX,Pinza,4,3,Esterilización por Autoclave,24/05/2023,1.0,Autoclave,21/12/2024
+ID-120,L-4197,Aspirador Manual,Medikro,Filtro,2,1,Esterilización por Radiación Gamma,24/03/2023,1.0,Autoclave,15/11/2025
+ID-121,L-5910,Pinza Quirúrgica,SURTEX,Retractor,3,2,Esterilización por Óxido de Etileno,12/12/2023,1.0,Autoclave,01/06/2025
+ID-122,L-8830,Pinza Quirúrgica,SURTEX,Tijera,2,1,Esterilización por Óxido de Etileno,24/10/2023,1.0,Autoclave,07/06/2026
+ID-123,L-2479,Pinza Quirúrgica,SURTEX,Pinza,5,4,Esterilización por Autoclave,10/03/2023,1.0,Autoclave,13/03/2025
+ID-124,L-5128,Sonda de Alimentación,SURTEX,Tijera,4,3,Esterilización por Plasma,14/02/2023,1.0,Autoclave,26/01/2026
+ID-125,L-4026,Tubo de Drenaje,SURTEX,Tijera,2,1,Esterilización por Óxido de Etileno,20/06/2023,1.0,Autoclave,12/02/2025
+ID-126,L-6854,Manguera de Oxígeno,SURTEX,Retractor,5,4,Esterilización por Autoclave,19/02/2023,1.0,Autoclave,14/06/2024
+ID-127,L-3324,Manguera de Oxígeno,SURTEX,Tubo,4,3,Esterilización por Óxido de Etileno,14/12/2023,1.0,Autoclave,01/08/2026
+ID-128,L-5357,Manguera de Oxígeno,SURTEX,Retractor,3,2,Esterilización por Óxido de Etileno,19/08/2023,1.0,Autoclave,01/04/2025
+ID-129,L-3159,Catéter Central,SURTEX,Pinza,2,1,Esterilización por Óxido de Etileno,08/08/2023,1.0,Autoclave,05/01/2025
+ID-130,L-3676,Sonda de Alimentación,SURTEX,Bisturi,3,2,Esterilización por Autoclave,05/03/2023,1.0,Autoclave,22/12/2025
+ID-131,L-7273,Sonda de Alimentación,SURTEX,Pasador,2,1,Esterilización por Óxido de Etileno,23/07/2023,1.0,Autoclave,21/03/2025
+ID-132,L-6348,Catéter Central,SURTEX,Langiroscopio,2,1,Esterilización por Autoclave,12/08/2023,1.0,Autoclave,14/07/2026
+ID-133,L-5732,Sonda de Alimentación,Intersugical,Filtro,2,1,Esterilización por Plasma,02/07/2023,1.0,Autoclave,19/04/2025
+ID-134,L-6265,Sensor de Presión,SURTEX,Pasador,5,4,Esterilización por Plasma,28/05/2023,1.0,Autoclave,06/05/2025
+ID-135,L-4680,Tubo de Drenaje,SURTEX,Retractor,5,4,Esterilización por Plasma,01/04/2023,1.0,Autoclave,02/11/2025
+ID-136,L-4035,Pinza Quirúrgica,SURTEX,Langiroscopio,4,3,Esterilización por Radiación Gamma,08/07/2023,4.0,Autoclave,19/09/2024
+ID-137,L-7822,Electrodo ECG,SURTEX,Langiroscopio,3,2,Esterilización por Radiación Gamma,19/03/2023,5.0,Autoclave,10/08/2024
+ID-138,L-8072,Válvula de Control,SURTEX,Tubo,3,2,Esterilización por Radiación Gamma,14/01/2023,1.0,Autoclave,17/04/2025
+ID-139,L-9938,Sensor de Presión,DIMEDA,Tijera,3,2,Esterilización por Plasma,05/01/2023,1.0,Autoclave,24/06/2024
+ID-140,L-3240,Sonda de Alimentación,DIMEDA,Tijera,3,2,Esterilización por Óxido de Etileno,09/11/2023,1.0,Autoclave,09/02/2025
+ID-141,L-1863,Sonda de Alimentación,DIMEDA,Tijera,3,2,Esterilización por Autoclave,08/10/2023,1.0,Autoclave,27/10/2025
+ID-142,L-1273,Electrodo ECG,Hamilton Medical,Valvula,2,1,Esterilización por Radiación Gamma,14/11/2023,1.0,Autoclave,07/10/2025
+ID-143,L-6879,Tubo de Drenaje,DIMEDA,Pasador,2,1,Esterilización por Plasma,30/08/2023,1.0,Autoclave,20/07/2026
+ID-144,L-4403,Sensor de Presión,DIMEDA,Pasador,2,1,Esterilización por Radiación Gamma,16/01/2023,1.0,Autoclave,30/07/2025
+ID-145,L-7586,Válvula de Control,DIMEDA,Retractor,5,4,Esterilización por Radiación Gamma,09/11/2023,1.0,Autoclave,08/12/2025
+ID-146,L-7348,Máscara de Ventilación,DIMEDA,Retractor,4,3,Esterilización por Autoclave,06/09/2023,1.0,Autoclave,06/06/2025
+ID-147,L-2076,Sonda de Alimentación,DIMEDA,Bisturi,4,3,Esterilización por Radiación Gamma,08/03/2023,1.0,Autoclave,25/06/2024
+ID-148,L-8884,Tubo de Drenaje,DIMEDA,Pinza,5,4,Esterilización por Autoclave,18/09/2023,1.0,Autoclave,17/10/2025
+ID-149,L-3181,Sensor de Presión,DIMEDA,Tijera,4,3,Esterilización por Óxido de Etileno,06/11/2023,1.0,Autoclave,23/12/2025
+ID-150,L-9791,Tubo de Drenaje,DIMEDA,Pinza,5,4,Esterilización por Óxido de Etileno,27/07/2023,1.0,Autoclave,12/06/2025
+ID-151,L-5792,Electrodo ECG,DIMEDA,Pinza,3,2,Esterilización por Radiación Gamma,28/12/2023,1.0,Autoclave,17/08/2026
+ID-152,L-3343,Pinza Quirúrgica,DIMEDA,Retractor,2,1,Esterilización por Radiación Gamma,04/03/2023,1.0,Autoclave,10/05/2024
+ID-153,L-8507,Válvula de Control,DIMEDA,Tijera,3,2,Esterilización por Óxido de Etileno,18/01/2023,1.0,Autoclave,28/09/2025
+ID-154,L-7411,Sonda de Alimentación,DIMEDA,Pinza,2,1,Esterilización por Óxido de Etileno,09/10/2023,1.0,Autoclave,12/12/2025
+ID-155,L-4393,Máscara de Ventilación,DIMEDA,Tijera,5,4,Esterilización por Plasma,27/09/2023,1.0,Autoclave,01/06/2025
+ID-156,L-3863,Sensor de Presión,DIMEDA,Bisturi,4,3,Esterilización por Óxido de Etileno,14/08/2023,1.0,Autoclave,13/08/2026
+ID-157,L-1147,Tubo de Drenaje,DIMEDA,Pinza,3,2,Esterilización por Plasma,03/07/2023,1.0,Autoclave,09/10/2025
+ID-158,L-4486,Sensor de Presión,DIMEDA,Pinza,2,1,Esterilización por Autoclave,12/04/2023,1.0,Autoclave,17/11/2024
+ID-159,L-2631,Tubo de Drenaje,Hamilton Medical,Mascara,3,2,Esterilización por Plasma,29/04/2023,1.0,Autoclave,18/07/2024
+ID-160,L-9951,Máscara de Ventilación,Hamilton Medical,Mascara,3,2,Esterilización por Autoclave,07/02/2023,2.0,Autoclave,06/05/2025
+ID-161,L-8446,Válvula de Control,Hamilton Medical,Equipo respiratorio,4,3,Esterilización por Óxido de Etileno,24/09/2023,1.0,Autoclave,14/06/2026
+ID-162,L-9724,Máscara de Ventilación,Hamilton Medical,Sensor,2,1,Esterilización por Plasma,18/04/2023,2.0,Autoclave,18/11/2024
+ID-163,L-5685,Aspirador Manual,Hamilton Medical,Valvula,3,2,Esterilización por Radiación Gamma,07/02/2023,1.0,Autoclave,13/07/2025
+ID-164,L-1896,Manguera de Oxígeno,Hamilton Medical,Valvula,4,3,Esterilización por Óxido de Etileno,02/07/2023,1.0,Autoclave,14/07/2024
+ID-165,L-7776,Catéter Central,Hamilton Medical,Filtro,5,4,Esterilización por Autoclave,11/02/2023,1.0,Autoclave,07/02/2025
+ID-166,L-1123,Sensor de Presión,Hamilton Medical,Cateter,3,2,Esterilización por Plasma,05/03/2023,1.0,Autoclave,07/08/2025
+ID-167,L-2873,Aspirador Manual,Hamilton Medical,Filtro,4,3,Esterilización por Autoclave,19/10/2023,1.0,Autoclave,24/03/2025
+ID-168,L-1987,Electrodo ECG,Hamilton Medical,Tubo,4,3,Esterilización por Plasma,20/12/2023,1.0,Autoclave,14/12/2025
+ID-169,L-6209,Catéter Central,Hamilton Medical,Filtro,5,4,Esterilización por Plasma,18/01/2023,1.0,Autoclave,29/08/2024
+ID-170,L-3934,Sensor de Presión,Hamilton Medical,Filtro,5,4,Esterilización por Plasma,20/11/2023,1.0,Autoclave,21/06/2026
+ID-171,L-9908,Máscara de Ventilación,Hamilton Medical,Filtro,5,4,Esterilización por Óxido de Etileno,21/11/2023,1.0,Autoclave,09/02/2026
+ID-172,L-9179,Tubo de Drenaje,Hamilton Medical,Tubo,3,2,Esterilización por Óxido de Etileno,11/11/2023,1.0,Autoclave,16/04/2025
+ID-173,L-3205,Pinza Quirúrgica,Metronic,Filtro,4,3,Esterilización por Plasma,08/08/2023,1.0,Autoclave,04/08/2026
+ID-174,L-4081,Aspirador Manual,Metronic,Filtro,4,3,Esterilización por Radiación Gamma,18/03/2023,1.0,Autoclave,09/07/2025
+ID-175,L-5027,Máscara de Ventilación,Metronic,Filtro,4,3,Esterilización por Radiación Gamma,13/12/2023,1.0,Autoclave,29/01/2026
+ID-176,L-4939,Máscara de Ventilación,Surgical House,Trocar,3,2,Esterilización por Óxido de Etileno,11/03/2023,4.0,STERRAD NX,08/02/2026
+ID-177,L-2427,Electrodo ECG,Surgical House,Trocar,3,2,Esterilización por Óxido de Etileno,30/08/2023,1.0,STERRAD NX,04/03/2025
+ID-178,L-2065,Válvula de Control,Surgical House,Trocar,3,2,Esterilización por Radiación Gamma,27/09/2023,4.0,STERRAD NX,31/08/2026
+ID-179,L-9817,Catéter Central,Medtronic,Trocar,5,4,Esterilización por Radiación Gamma,26/08/2023,1.0,STERRAD NX,15/02/2025
+ID-180,L-1919,Máscara de Ventilación,Zhichao Medical,Trocar,2,1,Esterilización por Óxido de Etileno,07/11/2023,,,26/07/2026

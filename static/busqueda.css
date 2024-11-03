@@ -1,0 +1,159 @@
+/* Importar la fuente Montserrat */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Barra lateral fija */
+.sidebar {
+    width: 200px;
+    height: 100vh;
+    background-color: #0077bc;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 20px;
+    z-index: 100;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+    text-align: left;
+}
+
+.sidebar ul li a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #138acf;
+}
+
+/* Encabezado */
+header {
+    padding: 20px;
+    background-color: white;
+    margin-left: 200px;
+}
+
+.navbar h1 {
+    color: #0077bc;
+    font-size: 36px;
+    text-align: center;
+}
+
+.user-menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-image {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.user-role {
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 10px;
+    margin-top: 10px;
+    z-index: 1;
+}
+
+.dropdown-content span, .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown.active .dropdown-content {
+    display: block;
+}
+
+/* Contenido principal */
+.content {
+    margin-left: 220px;
+    padding: 20px;
+}
+
+.page-title {
+    font-size: 24px;
+    color: #0077bc;
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.content-container {
+    margin: 0 auto;
+    max-width: 800px;
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+/* Tabla de resultados */
+.table-container {
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table th, .table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.table th {
+    background-color: #0077bc;
+    color: white;
+    font-weight: bold;
+}
+
+.table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.table tr:hover {
+    background-color: #f1f1f1;
+}

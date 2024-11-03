@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventario</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='inventario.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <h1>MEDITRACK</h1>
+            <div class="user-menu">
+                <img src="{{ url_for('static', filename='profile.png') }}" alt="Usuario" class="user-image">
+                <div class="dropdown">
+                    <span class="user-role">{{ session['role'] }} ▼</span>
+                    <div class="dropdown-content">
+                        <span>{{ session['username'] }}</span>
+                        <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <aside class="sidebar">
+        <ul>
+            <li><a href="{{ url_for('home') }}">Inicio</a></li>
+            <li><a href="{{ url_for('bd_usuarios') }}">BD Usuarios</a></li>
+            <li><a href="{{ url_for('inventario') }}">Inventario</a></li>
+            <li><a href="{{ url_for('esterilizacion') }}">Esterilización</a></li>
+            <li><a href="{{ url_for('busqueda_esterilizacion') }}">Búsqueda</a></li>
+            <li><a href="#">Atrás</a></li>
+        </ul>
+    </aside>
+
+    <main class="content">
+        <section class="upload-section">
+            <h2>Inventario de Dispositivos Médicos</h2>
+            <p>Carga un archivo CSV con los detalles del inventario.</p>
+            <p>El CSV debe contar con las siguientes columnas: <strong>identificación</strong>, <strong>lote</strong>, <strong>nombre DM</strong>, <strong>fabricante</strong>, <strong>dispositivo médico</strong>, <strong>número de reusos</strong>, <strong>número de esterilización</strong>, <strong>método de esterilización</strong>, <strong>fecha compra</strong>, <strong>cantidad de piezas</strong>, <strong>esterilizador</strong>, <strong>fecha de vencimiento</strong>.</p>
+
+            <form id="uploadForm" action="{{ url_for('inventario') }}" method="POST" enctype="multipart/form-data">
+                <input type="file" name="csv_file" accept=".csv">
+                <button type="submit" class="btn">Cargar CSV</button>
+            </form>
+        </section>
+
+        <!-- Sección de gráficos -->
+        {% if graph_path_histogram and graph_path_pie %}
+        <section class="inventory-graph">
+            <h2>Resumen de Inventario</h2>
+            <div class="graph-container">
+                <div class="graph-item">
+                    <h3>Cantidad de dispositivos por tipo</h3>
+                    <img src="{{ url_for('static', filename='histogram.png') }}" alt="Histograma de Inventario">
+                </div>
+                <div class="graph-item">
+                    <h3>Distribución de dispositivos</h3>
+                    <img src="{{ url_for('static', filename='pie_chart.png') }}" alt="Diagrama de Torta de Inventario">
+                </div>
+            </div>
+        </section>
+        {% else %}
+        <p>No hay gráficos disponibles. Cargue un archivo CSV para ver los resultados.</p>
+        {% endif %}
+
+        <!-- Modal para mostrar mensaje de éxito -->
+        <div id="successModal" class="modal">
+            <div class="modal-content">
+                <p id="modalMessage"></p>
+                <button id="closeModal">OK</button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('uploadForm').onsubmit = function(event) {
+            event.preventDefault();
+            var formData = new FormData(this);
+    
+            fetch("{{ url_for('inventario') }}", {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('modalMessage').textContent = 'CSV guardado con éxito.';
+                    location.reload(); // Recargar la página para mostrar los gráficos
+                } else {
+                    document.getElementById('modalMessage').textContent = data.message || 'Error al guardar el CSV.';
+                }
+                document.getElementById('successModal').style.display = 'block';
+            })
+            .catch(error => {
+                document.getElementById('modalMessage').textContent = 'Error al procesar el archivo.';
+                document.getElementById('successModal').style.display = 'block';
+            });
+        };
+    
+        document.getElementById('closeModal').onclick = function() {
+            document.getElementById('successModal').style.display = 'none';
+        };
+    </script>
+</body>
+</html>

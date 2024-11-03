@@ -1,0 +1,82 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MEDITRACK</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='home.css') }}">
+    <!-- Enlace a Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <h1>MEDITRACK</h1>
+            <div class="user-menu">
+                <img src="{{ url_for('static', filename='profile.png') }}" alt="Usuario" class="user-image">
+                <div class="dropdown">
+                    <span class="user-role">{{ role }} ▼</span> <!-- Mostrar el rol del usuario -->
+                    <div class="dropdown-content">
+                        <span>{{ username }}</span> <!-- Mostrar el nombre del usuario -->
+                        <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+
+    <aside class="sidebar">
+        <ul>
+            <li><a href="{{ url_for('home') }}">Inicio</a></li>
+            <li><a href="{{ url_for('bd_usuarios') }}">BD Usuarios</a></li>
+            <li><a href="{{ url_for('inventario') }}">Inventario</a></li>
+            <li><a href="{{ url_for('esterilizacion') }}">Esterilización</a></li>
+            <li><a href="{{ url_for('busqueda_esterilizacion') }}">Búsqueda</a></li>
+            <li><a href="#">Atrás</a></li>
+        </ul>
+    </aside>
+
+    <main class="content">
+        <section class="intro">
+            <div class="intro-text">
+                <h2>Ahorra tiempo y optimiza el uso de dispositivos médicos</h2>
+                <p>Meditrack facilita la gestión.</p>
+                <p>Con Meditrack, puedes controlar y gestionar el ciclo de vida completo de los dispositivos médicos reutilizables. Desde el seguimiento del inventario hasta la trazabilidad en la esterilización, Meditrack asegura que tus equipos siempre estén en las mejores condiciones para su uso.</p>
+            </div>
+            <img src="{{ url_for('static', filename='inventory.png') }}" alt="Gestión de dispositivos">
+        </section>
+        
+        
+
+          <!-- Sección modificada -->
+          <section class="advanced">
+            <div class="advanced-text">
+                <h2>Gestión avanzada de dispositivos médicos</h2>
+                <p>Ahora en el panel de Meditrack</p>
+                <p>¿Quieres saber cuántos dispositivos han sido reutilizados y cuántas veces han pasado por esterilización? Con Meditrack, puedes visualizar en tiempo real el estado de los dispositivos, el historial de uso y tomar decisiones informadas sobre nuevas adquisiciones y reemplazos.</p>
+            </div>
+            <div class="charts-column">
+                <img src="{{ url_for('static', filename='chart1.png') }}" alt="Gráfico de uso">
+            </div>
+        </section>
+
+        <section class="stats">
+            <h2>¿Qué puede hacer MEDITRACK por ti?</h2>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <h3>+80%</h3>
+                    <p>Reducción en desechos</p>
+                </div>
+                <div class="stat-box">
+                    <h3>+70%</h3>
+                    <p>Optimización en la gestión</p>
+                </div>
+                <div class="stat-box">
+                    <h3>+50%</h3>
+                    <p>Ahorro en costos operacionales</p>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>

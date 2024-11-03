@@ -1,0 +1,200 @@
+/* Importar la fuente Montserrat */
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Barra lateral fija */
+.sidebar {
+    width: 200px;
+    height: 100vh;
+    background-color: #0077bc;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding-top: 20px;
+    z-index: 100;
+}
+
+.sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.sidebar ul li {
+    padding: 10px;
+    text-align: left;
+}
+
+.sidebar ul li a {
+    display: block;
+    color: white;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+.sidebar ul li a:hover {
+    background-color: #138acf;
+}
+
+/* Encabezado */
+header {
+    padding: 20px;
+    background-color: white;
+    margin-left: 200px;
+}
+
+.navbar h1 {
+    color: #0077bc;
+    font-size: 36px;
+    text-align: center;
+}
+
+.user-menu {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.user-image {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.user-role {
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: white;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    padding: 10px;
+    margin-top: 10px;
+    z-index: 1;
+}
+
+.dropdown-content span, .dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown.active .dropdown-content {
+    display: block;
+}
+
+/* Contenido principal */
+/* Historial esterilizacion tabla*/
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.history-table th, .history-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.history-table th {
+    background-color: #0077bc;
+    color: white;
+}
+
+.history-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+#historial-container {
+    margin-top: 40px;
+}
+
+.content-container {
+    background-color: white;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 100%;
+    margin: 0 auto;
+    height: auto;  /* Ajusta la altura automáticamente */
+}
+
+.team-info-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+.image-container {
+    flex: 0.5;
+    max-width: 100px;  /* Reducimos el tamaño de la imagen */
+}
+
+.equipment-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 8px;
+}
+
+.info-table {
+    flex: 2;
+}
+
+.info-table table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;  /* Reducimos el tamaño del texto */
+}
+
+.info-table td {
+    padding: 5px;
+    border-bottom: none;  /* Eliminamos bordes innecesarios */
+}
+
+.alarm-indicator {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.alarm-circle {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-bottom: 5px;
+}
+
+.alarm-circle[style*="background-color: yellow;"] {
+    background-color: yellow;
+}
+
+.alarm-circle[style*="background-color: red;"] {
+    background-color: red;
+}

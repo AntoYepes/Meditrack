@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BD Usuarios</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='bd_usuarios.css') }}">
+    <!-- Enlace a Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <h1>MEDITRACK</h1>
+            <div class="user-menu">
+                <img src="{{ url_for('static', filename='profile.png') }}" alt="Usuario" class="user-image">
+                <div class="dropdown">
+                    <span class="user-role">{{ session['role'] }} ▼</span> <!-- Mostrar el usuario que ha iniciado sesión -->
+                    <div class="dropdown-content">
+                        <span>{{ session['username'] }}</span> <!-- Nombre del usuario -->
+                        <a href="{{ url_for('login') }}">Cerrar sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <aside class="sidebar">
+        <ul>
+            <li><a href="{{ url_for('home') }}">Inicio</a></li>
+            <li><a href="#">BD Usuarios</a></li>
+            <li><a href="{{ url_for('inventario') }}">Inventario</a></li>
+            <li><a href="{{ url_for('esterilizacion') }}">Esterilización</a></li>
+            <li><a href="{{ url_for('busqueda_esterilizacion') }}">Búsqueda</a></li>
+            <li><a href="#">Atrás</a></li>
+        </ul>
+    </aside>
+
+    <main class="content">
+        <section class="upload-section">
+            <h2>Bienvenido</h2>
+            <p>Carga el CSV con los usuarios que manejarán este software.</p>
+            <p>El CSV debe contar con 3 columnas: <strong>usuario</strong>, <strong>contraseña</strong>, <strong>rol</strong>.</p>
+            
+            <!-- Formulario para cargar el archivo CSV -->
+            <form action="{{ url_for('bd_usuarios') }}" method="POST" enctype="multipart/form-data">
+                <input type="file" name="csv_file" accept=".csv">
+                <button type="submit">Cargar CSV</button>
+            </form>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>

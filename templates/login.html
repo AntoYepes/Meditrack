@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meditrack - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+</head>
+<body>
+    <div class="login-box">
+        <h2>Meditrack</h2>
+
+        <!-- Mostrar mensajes de error o confirmación -->
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <ul class="flash-messages">
+              {% for message in messages %}
+                <li>{{ message }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+        <!-- Fin del bloque de mensajes -->
+
+        <form method="POST" action="/login">
+            <div class="textbox">
+                <input type="text" name="username" placeholder="Usuario" required>
+            </div>
+            <div class="textbox">
+                <input type="password" name="password" placeholder="Contraseña" required>
+            </div>
+            <input type="submit" class="btn" value="Entrar">
+        </form>
+    </div>
+</body>
+</html>

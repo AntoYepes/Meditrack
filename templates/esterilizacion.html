@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Esterilización</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='esterilizacion.css') }}">
+    <!-- Enlace a Google Fonts para que coincida con el estilo de Home -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <h1>MEDITRACK</h1>
+            <div class="user-menu">
+                <img src="{{ url_for('static', filename='profile.png') }}" alt="Usuario" class="user-image">
+                <div class="dropdown">
+                    <span class="user-role">{{ session['role'] }} ▼</span> <!-- Mostrar el usuario que ha iniciado sesión -->
+                    <div class="dropdown-content">
+                        <span>{{ session['username'] }}</span> <!-- Nombre del usuario -->
+                        <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <aside class="sidebar">
+        <ul>
+            <li><a href="{{ url_for('home') }}">Inicio</a></li>
+            <li><a href="{{ url_for('bd_usuarios') }}">BD Usuarios</a></li>
+            <li><a href="{{ url_for('inventario') }}">Inventario</a></li>
+            <li><a href="{{ url_for('esterilizacion') }}">Esterilización</a></li>
+            <li><a href="{{ url_for('busqueda_esterilizacion') }}">Búsqueda</a></li>
+            <li><a href="#">Atrás</a></li>
+        </ul>
+    </aside>
+
+    <main class="content">
+        <div class="content-container">
+            <h2 class="page-title">Registrar Esterilización</h2>
+            <form action="{{ url_for('procesar_esterilizacion') }}" method="POST" class="form-esterilizacion">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="identificacion_dm">No. Identificación DM:</label>
+                        <input type="text" id="identificacion_dm" name="identificacion_dm" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lote">No. Lote:</label>
+                        <input type="text" id="lote" name="lote" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nombre">Nombre del equipo:</label>
+                        <input type="text" id="nombre" name="nombre" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="persona_esteriliza">Persona que esteriliza:</label>
+                        <input type="text" id="persona_esteriliza" name="persona_esteriliza" value="{{ session['username'] }}" readonly>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="fecha">Fecha:</label>
+                        <input type="text" id="fecha" name="fecha" readonly value="{{ fecha_actual }}">
+                    </div>
+                    <div class="form-group">
+                        <label for="hora">Hora:</label>
+                        <input type="text" id="hora" name="hora" readonly value="{{ hora_actual }}">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ciclos">Ciclos:</label>
+                        <input type="text" id="ciclos" name="ciclos" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cantidad_piezas">Cantidad de Piezas:</label>
+                        <input type="number" id="cantidad_piezas" name="cantidad_piezas" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="esterilizador">Esterilizador:</label>
+                        <input type="text" id="esterilizador" name="esterilizador" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fecha_vencimiento">Fecha de Vencimiento:</label>
+                        <input type="date" id="fecha_vencimiento" name="fecha_vencimiento" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Esterilizó:</label>
+                        <div class="radio-group">
+                            <input type="radio" id="esterilizo_si" name="esterilizo" value="SI" required> <label for="esterilizo_si">SI</label>
+                            <input type="radio" id="esterilizo_no" name="esterilizo" value="NO"> <label for="esterilizo_no">NO</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Uso:</label>
+                        <div class="radio-group">
+                            <input type="radio" id="uso_si" name="uso" value="SI" required> <label for="uso_si">SI</label>
+                            <input type="radio" id="uso_no" name="uso" value="NO"> <label for="uso_no">NO</label>
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="submit-btn" id="submit-btn">Enviar</button>
+
+                <!-- Ventana emergente (modal) -->
+                <div id="success-modal" class="modal">
+                    <div class="modal-content">
+                        <h2>¡Esterilización de equipo guardada con éxito!</h2>
+                        <button id="modal-ok-btn" class="submit-btn">OK</button>
+                    </div>
+                </div>
+
+                <!-- Ventana emergente para la alerta de última esterilización -->
+                <div id="alerta-esterilizacion-modal" class="modal">
+                    <div class="modal-content">
+                        <h2>¡Alerta!</h2>
+                        <p>El dispositivo ha alcanzado el límite de Usos permitidas. Después de esta esterilización, debe desecharse.</p>
+                        <button id="modal-alerta-ok-btn" class="submit-btn">OK</button>
+                    </div>
+                </div> 
+            </form>
+        </div>
+    </main>
+    
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+
+    <!-- Script para hacer la solicitud AJAX -->
+<script>
+    document.getElementById('identificacion_dm').addEventListener('blur', function() {
+        var identificacion_dm = this.value;
+        if (identificacion_dm) {
+            fetch(`/buscar_dm?identificacion_dm=${identificacion_dm}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    document.getElementById('lote').value = data.lote;
+                    document.getElementById('nombre').value = data.nombre_dm;
+                    document.getElementById('cantidad_piezas').value = data.cantidad_piezas;
+                    document.getElementById('esterilizador').value = data.esterilizador;
+                    document.getElementById('fecha_vencimiento').value = data.fecha_vencimiento;
+                } else {
+                    alert('Dispositivo no encontrado.');
+                    document.getElementById('lote').value = '';
+                    document.getElementById('nombre').value = '';
+                    document.getElementById('cantidad_piezas').value = '';
+                    document.getElementById('esterilizador').value = '';
+                    document.getElementById('fecha_vencimiento').value = '';
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    });
+</script>
+
+
+    <!-- Script para manejar la lógica de las ventanas emergentes -->
+    <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+            event.preventDefault();  // Evitar el envío por defecto del formulario
+            
+            fetch("{{ url_for('procesar_esterilizacion') }}", {
+                method: 'POST',
+                body: new FormData(this)
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Verificar si se ha alcanzado el límite de esterilización
+                if (data.alerta_limpieza) {
+                    // Mostrar la ventana de alerta
+                    document.getElementById('alerta-esterilizacion-modal').style.display = 'block';
+                    
+                    // Guardar la URL para redirigir después de cerrar la alerta
+                    const redirectUrl = data.redirect_url;
+                    document.getElementById('modal-alerta-ok-btn').setAttribute('data-redirect-url', redirectUrl);
+                    
+                    return;  // Detener la ejecución para evitar mostrar la ventana de éxito
+                }
+
+                // Mostrar la ventana emergente de éxito si no se alcanzó el límite
+                if (data.success) {
+                    document.getElementById('success-modal').style.display = 'block';
+                    document.getElementById('modal-ok-btn').setAttribute('data-redirect-url', data.redirect_url);
+                } else {
+                    alert('Error: ' + data.message);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        });
+
+        // Manejar el clic en el botón "OK" de la alerta
+        document.getElementById('modal-alerta-ok-btn').addEventListener('click', function() {
+            // Cerrar el modal de alerta
+            document.getElementById('alerta-esterilizacion-modal').style.display = 'none';
+
+            // Obtener la URL de redirección desde el atributo del botón
+            const redirectUrl = this.getAttribute('data-redirect-url');
+            
+            // Redirigir a la URL almacenada
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+            }
+        });
+
+        // Manejar el clic en el botón "OK" de la ventana de éxito
+        document.getElementById('modal-ok-btn').addEventListener('click', function() {
+            // Cerrar el modal de éxito
+            document.getElementById('success-modal').style.display = 'none';
+
+            // Obtener la URL de redirección desde el atributo del botón
+            const redirectUrl = this.getAttribute('data-redirect-url');
+
+            // Redirigir a la URL almacenada
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+            }
+        });
+    </script>
+
+
+
+    <script>
+        $(document).ready(function() {
+    // Manejar la respuesta del formulario de esterilización
+    $('#esterilizacionForm').submit(function(event) {
+        event.preventDefault();  // Prevenir el envío predeterminado del formulario
+
+        $.ajax({
+        url: '/procesar_esterilizacion',
+        type: 'POST',
+        data: $(this).serialize(),
+        success: function(data) {
+            if (data.success) {
+            if (data.limite_alcanzado) {
+                // Mostrar el modal si se alcanzó el límite
+                $('#limiteAlcanzadoModal').modal('show');
+            } else if (data.redirect_url) {
+                // Redirigir si la URL está definida
+                window.location.href = data.redirect_url;
+            }
+            } else {
+            alert('Error: ' + data.message);
+            }
+        },
+        error: function() {
+            alert('Error en el servidor.');
+        }
+        });
+    });
+    });
+
+  </script>
+    
+</body>
+</html>

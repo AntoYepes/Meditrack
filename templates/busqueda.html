@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busqueda</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='busqueda.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <h1>MEDITRACK</h1>
+            <div class="user-menu">
+                <img src="{{ url_for('static', filename='profile.png') }}" alt="Usuario" class="user-image">
+                <div class="dropdown">
+                    <span class="user-role">{{ session['role'] }} ▼</span>
+                    <div class="dropdown-content">
+                        <span>{{ session['username'] }}</span>
+                        <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <aside class="sidebar">
+        <ul>
+            <li><a href="{{ url_for('home') }}">Inicio</a></li>
+            <li><a href="{{ url_for('bd_usuarios') }}">BD Usuarios</a></li>
+            <li><a href="{{ url_for('inventario') }}">Inventario</a></li>
+            <li><a href="{{ url_for('esterilizacion') }}">Esterilización</a></li>
+            <li><a href="{{ url_for('busqueda_esterilizacion') }}">Búsqueda</a></li>
+            <li><a href="#">Atrás</a></li>
+        </ul>
+    </aside>
+
+    <main class="content">
+        <section class="search-section">
+            <h2>Búsqueda de Registros de Esterilización</h2>
+            <form method="GET" action="{{ url_for('busqueda_esterilizacion') }}">
+                <input type="text" name="query" placeholder="Buscar por identificación, lote o nombre" value="{{ query }}">
+                <button type="submit" class="btn">Buscar</button>
+            </form>
+        </section>
+
+        {% if resultados %}
+        <section class="results-section">
+            <h3>Resultados de la Búsqueda</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Identificación DM</th>
+                        <th>Lote</th>
+                        <th>Nombre DM</th>
+                        <th>Persona que Esteriliza</th>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                        <th>Esterilizó</th>
+                        <th>Uso</th>
+                        <th>Ciclos</th>
+                        <th>Cantidad de Piezas</th>
+                        <th>Esterilizador</th>
+                        <th>Fecha de Vencimiento</th>
+                        <th>Cantidad de Esterilizaciones</th>
+                        <th>Cantidad de Usos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for registro in resultados %}
+                    <tr>
+                        <td>{{ registro[0] }}</td>
+                        <td>{{ registro[1] }}</td>
+                        <td>{{ registro[2] }}</td>
+                        <td>{{ registro[3] }}</td>
+                        <td>{{ registro[4] }}</td>
+                        <td>{{ registro[5] }}</td>
+                        <td>{{ registro[6] }}</td>
+                        <td>{{ registro[7] }}</td>
+                        <td>{{ registro[8] }}</td>
+                        <td>{{ registro[9] }}</td>
+                        <td>{{ registro[10] }}</td>
+                        <td>{{ registro[11] }}</td>
+                        <td>{{ registro[12] }}</td>
+                        <td>{{ registro[13] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+        {% else %}
+        <p>No se encontraron resultados.</p>
+        {% endif %}
+    </main>
+</body>
+</html>
