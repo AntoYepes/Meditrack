@@ -127,6 +127,52 @@ header {
     border-radius: 8px;
 }
 
+/* Estilizar la barra de búsqueda */
+.search-section input[type="text"] {
+    width: 60%;
+    padding: 10px;
+    border: 2px solid #0077bc;
+    border-radius: 8px;
+    font-size: 16px;
+    margin-right: 10px;
+    outline: none;
+    transition: box-shadow 0.3s ease;
+}
+
+.search-section input[type="text"]:focus {
+    box-shadow: 0 0 10px rgba(0, 119, 188, 0.5);
+}
+
+/* Botón de búsqueda estilizado */
+/* Estilizar la barra de búsqueda en negro */
+.search-section input[type="text"] {
+    width: auto; /* Mantiene el tamaño original */
+    padding: 8px;
+    border: 2px solid #000;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-right: 10px;
+    outline: none;
+}
+
+/* Botón de búsqueda azul */
+.search-section .btn {
+    background-color: #0077bc;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.search-section .btn:hover {
+    background-color: #005a90;
+}
+
+
+
 /* Tabla de resultados */
 .table-container {
     margin-top: 20px;
