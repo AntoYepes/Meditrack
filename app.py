@@ -280,6 +280,18 @@ def procesar_esterilizacion():
             )
         ''')
 
+        # Verificar si ya existe un registro con los mismos identificadores clave
+        c_esterilizacion.execute('''
+            SELECT * FROM esterilizacion
+            WHERE identificacion_dm = ? AND fecha = ? AND hora = ?
+        ''', (identificacion_dm, fecha, hora))
+        registro_existente = c_esterilizacion.fetchone()
+
+        if registro_existente:
+            # Cerrar la conexión antes de retornar
+            conn_esterilizacion.close()
+            return jsonify({'success': False, 'message': 'Registro duplicado, no se puede insertar.'})
+
         # Obtener la cantidad de esterilizaciones y usos más recientes
         c_esterilizacion.execute('''
             SELECT cantidad_esterilizaciones, cantidad_usos
@@ -301,9 +313,6 @@ def procesar_esterilizacion():
         if uso == 'SI':
             cantidad_usos += 1
 
-        # Verificar si se ha alcanzado el límite de esterilización N-1
-        alerta_limpieza = cantidad_usos == (numero_reusos_permitida - 1)
-
         # Insertar los datos de la esterilización
         c_esterilizacion.execute('''
             INSERT INTO esterilizacion (
@@ -321,21 +330,6 @@ def procesar_esterilizacion():
         conn_esterilizacion.commit()
         conn_esterilizacion.close()
 
-        # Retornar solo la alerta si se alcanzó el límite
-        if alerta_limpieza:
-            return jsonify({'success': True, 'alerta_limpieza': True, 
-                            'redirect_url': url_for('equipo_esterilizado', 
-                                 identificacion_dm=identificacion_dm, 
-                                 lote=lote, nombre_dm=nombre_dm, 
-                                 persona_esteriliza=persona_esteriliza, 
-                                 fecha=fecha, hora=hora, ciclos=ciclos, 
-                                 cantidad_piezas=cantidad_piezas, 
-                                 esterilizador=esterilizador, 
-                                 fecha_vencimiento=fecha_vencimiento,
-                                 cantidad_esterilizaciones=cantidad_esterilizaciones,
-                                 cantidad_usos=cantidad_usos,
-                                 numero_reusos_permitida=numero_reusos_permitida)})
-
         # Retornar redirección si no hay alerta
         return jsonify({'success': True, 'redirect_url': url_for('equipo_esterilizado', 
                                  identificacion_dm=identificacion_dm, 
@@ -350,6 +344,7 @@ def procesar_esterilizacion():
                                  numero_reusos_permitida=numero_reusos_permitida)})
     else:
         return jsonify({'success': False, 'message': 'Identificación de dispositivo médico no encontrada.'})
+
 
 
 # Nueva ruta para la página equipo_esterilizado
@@ -388,9 +383,9 @@ def busqueda_esterilizacion():
         conn = sqlite3.connect('esterilizacion.db')
         c = conn.cursor()
         c.execute('''
-            SELECT * FROM esterilizacion
-            WHERE identificacion_dm LIKE ? OR lote LIKE ? OR nombre_dm LIKE ?
-        ''', (f'%{query}%', f'%{query}%', f'%{query}%'))
+            SELECT DISTINCT * FROM esterilizacion
+            WHERE identificacion_dm LIKE ?
+        ''', (f'%{query}%',))
         resultados = c.fetchall()
         conn.close()
 
