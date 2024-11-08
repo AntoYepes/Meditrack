@@ -394,7 +394,6 @@ def equipo_esterilizado():
                            numero_reusos_permitida=numero_reusos_permitida)
 
 
-# Ruta para la búsqueda de registros de esterilización
 @app.route('/busqueda_esterilizacion', methods=['GET'])
 def busqueda_esterilizacion():
     query = request.args.get('query', '')
@@ -403,6 +402,7 @@ def busqueda_esterilizacion():
     if query:
         conn = sqlite3.connect('esterilizacion.db')
         c = conn.cursor()
+        # Consulta original para obtener los registros de esterilización
         c.execute('''
             SELECT DISTINCT * FROM esterilizacion
             WHERE identificacion_dm LIKE ?
@@ -410,7 +410,31 @@ def busqueda_esterilizacion():
         resultados = c.fetchall()
         conn.close()
 
-    return render_template('busqueda.html', query=query, resultados=resultados)
+        # Abrimos otra conexión para obtener el número de usos permitidos desde `inventory`
+        conn_inventory = sqlite3.connect('inventory.db')
+        c_inventory = conn_inventory.cursor()
+
+        # Agregar el número de usos permitidos a cada registro en `resultados`
+        resultados_con_usos_permitidos = []
+        for registro in resultados:
+            identificacion_dm = registro[0]
+            # Obtener el número de usos permitidos de `inventory`
+            c_inventory.execute('''
+                SELECT numero_reusos FROM inventory WHERE identificacion = ?
+            ''', (identificacion_dm,))
+            usos_permitidos = c_inventory.fetchone()
+            numero_usos_permitidos = usos_permitidos[0] if usos_permitidos else 'N/A'
+            
+            # Agregar `numero_usos_permitidos` al registro
+            registro_con_usos_permitidos = registro + (numero_usos_permitidos,)
+            resultados_con_usos_permitidos.append(registro_con_usos_permitidos)
+
+        conn_inventory.close()
+    else:
+        resultados_con_usos_permitidos = []
+
+    return render_template('busqueda.html', query=query, resultados=resultados_con_usos_permitidos)
+
 
 
 # Buscar dispositivo médico para llenar lote, nombre DM, cantidad_piezas, esterilizador y fecha de vencimiento
