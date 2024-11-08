@@ -144,6 +144,20 @@ header {
 }
 
 /* Botón de búsqueda estilizado */
+
+.btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff; /* Match the color for both buttons */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
 /* Estilizar la barra de búsqueda en negro */
 .search-section input[type="text"] {
     width: auto; /* Mantiene el tamaño original */

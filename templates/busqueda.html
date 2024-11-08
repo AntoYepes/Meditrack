@@ -6,6 +6,8 @@
     <title>Busqueda</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='busqueda.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Incluir la librería de escaneo de QR -->
+    <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 </head>
 <body>
     <header>
@@ -31,17 +33,22 @@
             <li><a href="{{ url_for('inventario') }}">Inventario</a></li>
             <li><a href="{{ url_for('esterilizacion') }}">Esterilización</a></li>
             <li><a href="{{ url_for('busqueda_esterilizacion') }}">Búsqueda</a></li>
-            <li><a href="#">Atrás</a></li>
         </ul>
     </aside>
 
     <main class="content">
         <section class="search-section">
             <h2>Búsqueda de Registros de Esterilización</h2>
+            <!-- In the HTML form -->
             <form method="GET" action="{{ url_for('busqueda_esterilizacion') }}">
-                <input type="text" name="query" placeholder="Buscar por identificación" value="{{ query }}">
+                <input type="text" id="query" name="query" placeholder="Buscar por identificación" value="{{ query }}">
+                <!-- Apply the 'btn' class to both buttons for uniform styling -->
+                <button type="button" id="scan-qr-btn" class="btn" style="margin-left: 10px;">Escanear QR</button>
                 <button type="submit" class="btn">Buscar</button>
             </form>
+
+            <!-- QR Reader Container -->
+            <div id="qr-reader" style="width: 300px; margin-top: 10px; display: none;"></div>
         </section>
 
         {% if resultados %}
@@ -92,5 +99,53 @@
         <p>No se encontraron resultados.</p>
         {% endif %}
     </main>
+
+    <!-- FUNCION QR-->
+    <!-- JavaScript to initialize the QR code scanner -->
+    <script>
+        document.getElementById('scan-qr-btn').addEventListener('click', function() {
+        console.log("QR Scan button clicked");
+
+        const qrReader = document.getElementById('qr-reader');
+        qrReader.style.display = 'block';  // Show the QR reader container
+        console.log("QR reader container displayed");
+
+        const html5QrcodeScanner = new Html5Qrcode("qr-reader");
+
+        // Start QR code scanning
+        html5QrcodeScanner.start(
+            { facingMode: "environment" }, // Attempt to use the rear camera if available
+            { fps: 10, qrbox: 250 },
+            qrCodeMessage => {
+                console.log("QR Code detected:", qrCodeMessage);
+
+                // Populate the 'query' field in the Búsqueda page
+                const searchField = document.querySelector('input[name="query"]');
+                if (searchField) {
+                    searchField.value = qrCodeMessage;
+                    console.log("QR code value set in search field:", qrCodeMessage);
+
+                    // Trigger the click event on the "Buscar" button to submit the form
+                    document.querySelector('button[type="submit"]').click();
+                }
+
+                // Stop the QR code scanner
+                html5QrcodeScanner.stop().then(() => {
+                    console.log("QR reader stopped");
+                    qrReader.style.display = 'none'; // Hide the QR reader container
+                }).catch(err => {
+                    console.error("Error stopping QR scanner:", err);
+                });
+            },
+            errorMessage => {
+                console.warn(`QR error: ${errorMessage}`);
+            }
+        ).catch(err => {
+            console.error(`Unable to start scanning: ${err}`);
+        });
+    });
+
+
+    </script>
 </body>
 </html>

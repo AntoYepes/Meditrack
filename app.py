@@ -226,7 +226,12 @@ def esterilizacion():
         # Obtener la fecha y hora actuales
         fecha_actual = datetime.now().strftime('%Y-%m-%d')
         hora_actual = datetime.now().strftime('%H:%M:%S')
-        return render_template('esterilizacion.html', fecha_actual=fecha_actual, hora_actual=hora_actual)
+
+        # Obtener el parámetro `identificacion_dm` de la URL si está presente
+        identificacion_dm = request.args.get('identificacion_dm', '')
+
+        # Pasar `identificacion_dm` al renderizado de la plantilla
+        return render_template('esterilizacion.html', fecha_actual=fecha_actual, hora_actual=hora_actual, identificacion_dm=identificacion_dm)
     else:
         return redirect(url_for('login'))
 
