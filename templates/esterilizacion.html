@@ -142,6 +142,15 @@
                     </div>
                 </div>
 
+                <!-- Ventana emergente para el  de uso alcanzado -->
+                <div id="Supero-uso-modal" class="modal">
+                    <div class="modal-content">
+                        <h2>¡Alerta!</h2>
+                        <p>Ya superó el número de usos permitido, no puede continuar.</p>
+                        <button id="modal-supero-uso-ok-btn" class="submit-btn">OK</button>
+                    </div>
+                </div>
+
             </form>
         </div>
     </main>
@@ -149,39 +158,39 @@
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 
     <!-- Script para hacer la solicitud AJAX -->
-<script>
-    document.getElementById('identificacion_dm').addEventListener('blur', function() {
-        var identificacion_dm = this.value;
-        if (identificacion_dm) {
-            fetch(`/buscar_dm?identificacion_dm=${identificacion_dm}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    document.getElementById('lote').value = data.lote;
-                    document.getElementById('nombre').value = data.nombre_dm;
-                    document.getElementById('cantidad_piezas').value = data.cantidad_piezas;
-                    document.getElementById('esterilizador').value = data.esterilizador;
-                    document.getElementById('fecha_vencimiento').value = data.fecha_vencimiento;
-                } else {
-                    alert('Dispositivo no encontrado.');
-                    document.getElementById('lote').value = '';
-                    document.getElementById('nombre').value = '';
-                    document.getElementById('cantidad_piezas').value = '';
-                    document.getElementById('esterilizador').value = '';
-                    document.getElementById('fecha_vencimiento').value = '';
-                }
-            })
-            .catch(error => console.error('Error:', error));
-        }
-    });
-</script>
-
-
-    <!-- Script para manejar la lógica de las ventanas emergentes -->
     <script>
-       document.querySelector('form').addEventListener('submit', function(event) {
-        event.preventDefault();  // Evitar el envío por defecto del formulario
-        
+        document.getElementById('identificacion_dm').addEventListener('blur', function() {
+            var identificacion_dm = this.value;
+            if (identificacion_dm) {
+                fetch(`/buscar_dm?identificacion_dm=${identificacion_dm}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        document.getElementById('lote').value = data.lote;
+                        document.getElementById('nombre').value = data.nombre_dm;
+                        document.getElementById('cantidad_piezas').value = data.cantidad_piezas;
+                        document.getElementById('esterilizador').value = data.esterilizador;
+                        document.getElementById('fecha_vencimiento').value = data.fecha_vencimiento;
+                    } else {
+                        alert('Dispositivo no encontrado.');
+                        document.getElementById('lote').value = '';
+                        document.getElementById('nombre').value = '';
+                        document.getElementById('cantidad_piezas').value = '';
+                        document.getElementById('esterilizador').value = '';
+                        document.getElementById('fecha_vencimiento').value = '';
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+    </script>
+
+
+        <!-- Script para manejar la lógica de las ventanas emergentes -->
+        <script>
+        document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault();  // Prevent the default form submission
+
         fetch("{{ url_for('procesar_esterilizacion') }}", {
             method: 'POST',
             body: new FormData(this)
@@ -190,35 +199,37 @@
         .then(data => {
             if (data.success) {
                 const mensaje = data.mensaje;
-                const redirectUrl = data.redirect_url;  // URL dinámica desde el backend
+                const redirectUrl = data.redirect_url;  // URL for redirection if needed
 
                 if (mensaje === "El dispositivo le falta un solo uso permitido.") {
-                    // Mostrar advertencia de que solo queda un uso permitido
+                    // Show warning that only one use is left
                     document.getElementById('ultimo-uso-modal').style.display = 'block';
-                    // Almacenar la URL de redirección en el botón OK
                     document.getElementById('modal-ultimo-uso-ok-btn').setAttribute('data-redirect-url', redirectUrl);
                 } else if (mensaje === "El dispositivo ha cumplido el número máximo de usos permitidos y debe desecharse.") {
-                    // Mostrar alerta de límite de uso alcanzado
+                    // Show alert that usage limit has been reached
                     document.getElementById('limite-uso-modal').style.display = 'block';
-                    // Almacenar la URL de redirección en el botón OK
                     document.getElementById('modal-limite-uso-ok-btn').setAttribute('data-redirect-url', redirectUrl);
                 } else {
-                    // Mostrar la ventana emergente de éxito
+                    // Show success modal for successful registration
                     document.getElementById('success-modal').style.display = 'block';
-                    // Almacenar la URL de redirección en el botón OK
                     document.getElementById('modal-ok-btn').setAttribute('data-redirect-url', redirectUrl);
                 }
             } else {
-                alert('Error: ' + data.message);
+                // If the message is that the usage limit has been exceeded, show the "Supero-uso-modal"
+                if (data.mensaje === "Ya superó el número de usos permitido, no puede continuar.") {
+                    document.getElementById('Supero-uso-modal').style.display = 'block';
+                } else {
+                    alert('Error: ' + data.message);
+                }
             }
         })
         .catch(error => console.error('Error:', error));
     });
 
-    // Cerrar las ventanas emergentes al hacer clic en "OK" y redirigir a la URL correspondiente
+    // Handle "OK" button clicks for each modal, including closing the exceeded usage modal without redirection
     document.getElementById('modal-ok-btn').addEventListener('click', function() {
         document.getElementById('success-modal').style.display = 'none';
-        const redirectUrl = this.getAttribute('data-redirect-url');  // Obtener la URL dinámica
+        const redirectUrl = this.getAttribute('data-redirect-url');
         if (redirectUrl) {
             window.location.href = redirectUrl;
         }
@@ -226,7 +237,7 @@
 
     document.getElementById('modal-ultimo-uso-ok-btn').addEventListener('click', function() {
         document.getElementById('ultimo-uso-modal').style.display = 'none';
-        const redirectUrl = this.getAttribute('data-redirect-url');  // Obtener la URL dinámica
+        const redirectUrl = this.getAttribute('data-redirect-url');
         if (redirectUrl) {
             window.location.href = redirectUrl;
         }
@@ -234,10 +245,17 @@
 
     document.getElementById('modal-limite-uso-ok-btn').addEventListener('click', function() {
         document.getElementById('limite-uso-modal').style.display = 'none';
-        const redirectUrl = this.getAttribute('data-redirect-url');  // Obtener la URL dinámica
+        const redirectUrl = this.getAttribute('data-redirect-url');
         if (redirectUrl) {
             window.location.href = redirectUrl;
         }
+    });
+
+    // Handle "OK" button for the "Supero-uso-modal" to just close the modal without any redirection
+    document.getElementById('modal-supero-uso-ok-btn').addEventListener('click', function() {
+        document.getElementById('Supero-uso-modal').style.display = 'none';
+        // Reset the form fields
+        document.querySelector('.form-esterilizacion').reset();
     });
 
     </script>

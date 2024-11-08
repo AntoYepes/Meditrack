@@ -311,12 +311,20 @@ def procesar_esterilizacion():
         cantidad_esterilizaciones = resultados[0] if resultados else 0
         cantidad_usos = resultados[1] if resultados else 0
 
+        
+
         # Incrementar la cantidad de esterilizaciones y usos si se marca "SI"
         if esterilizo == 'SI':
             cantidad_esterilizaciones += 1
 
         if uso == 'SI':
             cantidad_usos += 1
+
+        # Verificar si el dispositivo ha superado el número máximo de usos permitidos
+        if cantidad_usos > numero_reusos_permitida:
+            # No guardar el registro y mostrar el mensaje de advertencia
+            conn_esterilizacion.close()
+            return jsonify({'success': False, 'mensaje': "Ya superó el número de usos permitido, no puede continuar."})
 
         # Insertar los datos de la esterilización
         c_esterilizacion.execute('''
