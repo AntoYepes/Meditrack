@@ -6,6 +6,7 @@ import os
 import matplotlib
 matplotlib.use('Agg')  # Usar un backend que no dependa de GUI
 import matplotlib.pyplot as plt
+import seaborn as sns
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
@@ -122,11 +123,13 @@ def bd_usuarios():
 # Ruta para el inventario
 @app.route('/inventario', methods=['GET', 'POST'])
 def inventario():
-    success = False  # Para el manejo de la ventana modal
+    success = False  # For handling modal display
     data_summary = None
     graph_path_histogram = None
     graph_path_pie = None
+    graph_path_pinzas = None
 
+    # Handle CSV upload for inventory
     if request.method == 'POST':
         file = request.files.get('csv_file')
         if not file or file.filename == '':
@@ -136,7 +139,7 @@ def inventario():
         file.save(filepath)
 
         try:
-            # Leer el CSV y cargarlo a la base de datos
+            # Read and load CSV into inventory database
             data = pd.read_csv(filepath)
             if data.empty:
                 return jsonify({'success': False, 'message': 'El archivo CSV está vacío'})
@@ -144,7 +147,7 @@ def inventario():
             conn = sqlite3.connect('inventory.db')
             c = conn.cursor()
 
-            # Crear la tabla 'inventory' si no existe
+            # Create 'inventory' table if it doesn't exist
             c.execute('''
                 CREATE TABLE IF NOT EXISTS inventory (
                     identificacion TEXT PRIMARY KEY,
@@ -162,14 +165,14 @@ def inventario():
                 )
             ''')
 
-            # Asegúrate de que las columnas están correctas antes de continuar
+            # Ensure columns match the required structure
             required_columns = ['identificacion', 'lote', 'nombre_dm', 'fabricante', 'dispositivo_medico', 
                                 'numero_reusos', 'numero_esterilizacion', 'metodo_esterilizacion', 'fecha_compra', 
                                 'cantidad_piezas', 'esterilizador', 'fecha_vencimiento']
             if not all(column in data.columns for column in required_columns):
                 return jsonify({'success': False, 'message': 'El archivo CSV no tiene las columnas correctas.'})
 
-            # Insertar cada fila en la base de datos
+            # Insert rows into inventory database
             for _, row in data.iterrows():
                 c.execute('''
                     INSERT OR IGNORE INTO inventory 
@@ -188,14 +191,14 @@ def inventario():
         except Exception as e:
             return jsonify({'success': False, 'message': f'Error al procesar el archivo: {str(e)}'})
 
-    # Conectar a la base de datos y obtener los datos para el resumen
+    # Load inventory data summary
     conn = sqlite3.connect('inventory.db')
     data_summary = pd.read_sql_query("SELECT dispositivo_medico, COUNT(*) as cantidad FROM inventory GROUP BY dispositivo_medico", conn)
     conn.close()
 
-    # Generar gráficos si hay datos
+    # Generate histograms and pie charts if data is available
     if not data_summary.empty:
-        # Crear un histograma
+        # Create a histogram
         plt.figure(figsize=(10, 6))
         plt.bar(data_summary['dispositivo_medico'], data_summary['cantidad'], color='skyblue')
         plt.title('Cantidad de Dispositivos por Tipo')
@@ -207,16 +210,71 @@ def inventario():
         plt.savefig(graph_path_histogram)
         plt.close()
 
-        # Crear un diagrama de torta
+        # Create a pie chart
         plt.figure(figsize=(8, 8))
         plt.pie(data_summary['cantidad'], labels=data_summary['dispositivo_medico'], autopct='%1.1f%%', colors=plt.cm.Paired.colors)
         plt.title('Distribución de Dispositivos Médicos')
         graph_path_pie = os.path.join('static', 'pie_chart.png')
         plt.savefig(graph_path_pie)
         plt.close()
+        
+    # Retrieve and merge data for the "pinzas" usage chart
+    # Query inventory.db for allowed uses (numero_reusos)
+    conn_inventory = sqlite3.connect('inventory.db')
+    pinzas_inventory_data = pd.read_sql_query('''
+        SELECT identificacion, nombre_dm, numero_reusos
+        FROM inventory
+        WHERE dispositivo_medico LIKE '%Pinza%'
+    ''', conn_inventory)
+    conn_inventory.close()
+
+    # Query esterilizacion.db for current uses (cantidad_usos)
+    conn_esterilizacion = sqlite3.connect('esterilizacion.db')
+    pinzas_esterilizacion_data = pd.read_sql_query('''
+        SELECT identificacion_dm AS identificacion, nombre_dm, cantidad_usos
+        FROM esterilizacion
+        WHERE nombre_dm LIKE '%Pinza%'
+    ''', conn_esterilizacion)
+    conn_esterilizacion.close()
+
+    # Merge the two datasets on 'identificacion' to combine allowed and current uses
+    pinzas_data = pd.merge(pinzas_inventory_data, pinzas_esterilizacion_data, on='identificacion', how='inner', suffixes=('_inventory', '_esterilizacion'))
+
+    # Debug: Print columns of merged DataFrame to check names
+    print("Columns in pinzas_data after merge:", pinzas_data.columns)
+
+    # Use the correct column names from the merged DataFrame
+    if not pinzas_data.empty:
+        # Plot "pinzas" current vs allowed uses
+  # Ajustar el tamaño de la figura
+        plt.figure(figsize=(12, 8))
+
+        # Configurar el gráfico de barras para los usos actuales
+        sns.barplot(x=pinzas_data['nombre_dm_inventory'], y=pinzas_data['cantidad_usos'], color='skyblue', label='Usos Actuales', ci=None)
+
+        # Configurar la línea de puntos para los usos permitidos
+        plt.plot(pinzas_data['nombre_dm_inventory'], pinzas_data['numero_reusos'], color='red', marker='o', linestyle='--', label='Usos Permitidos')
+
+        # Personalizar etiquetas y leyenda
+        plt.title('Usos Actuales vs Usos Permitidos para Pinzas', fontsize=16, fontweight='bold')
+        plt.xlabel('Pinzas', fontsize=14)
+        plt.ylabel('Número de Usos', fontsize=14)
+        plt.xticks(rotation=45, ha='right', fontsize=10)
+        plt.legend(fontsize=12)
+
+        # Ajustar el espaciado
+        plt.tight_layout()
+
+        # Guardar el gráfico
+        graph_path_pinzas = os.path.join('static', 'pinzas_uso_chart.png')
+        plt.savefig(graph_path_pinzas)
+        plt.close()
 
     return render_template('inventario.html', success=success, 
-                           graph_path_histogram=graph_path_histogram, graph_path_pie=graph_path_pie)
+                           graph_path_histogram=graph_path_histogram, 
+                           graph_path_pie=graph_path_pie,
+                           graph_path_pinzas=graph_path_pinzas)
+
 
 
 # Ruta para esterilizacion

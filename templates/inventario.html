@@ -59,12 +59,22 @@
                     <h3>Distribución de dispositivos</h3>
                     <img src="{{ url_for('static', filename='pie_chart.png') }}" alt="Diagrama de Torta de Inventario">
                 </div>
+                {% if graph_path_pinzas %}
+                <section class="inventory-graph">
+                    <h2>Usos Actuales vs Usos Permitidos para Pinzas</h2>
+                    <div class="graph-container">
+                        <div class="graph-item">
+                            <img src="{{ url_for('static', filename='pinzas_uso_chart.png') }}" alt="Gráfico de Usos de Pinzas">
+                        </div>
+                    </div>
+                </section>
+                {% endif %}
+
             </div>
         </section>
         {% else %}
         <p>No hay gráficos disponibles. Cargue un archivo CSV para ver los resultados.</p>
         {% endif %}
-
         <!-- Modal para mostrar mensaje de éxito -->
         <div id="successModal" class="modal">
             <div class="modal-content">
