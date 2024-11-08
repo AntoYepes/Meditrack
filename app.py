@@ -335,8 +335,16 @@ def procesar_esterilizacion():
         conn_esterilizacion.commit()
         conn_esterilizacion.close()
 
+        # Lógica para determinar el mensaje de respuesta según los casos
+        if cantidad_usos == numero_reusos_permitida:
+            mensaje = "El dispositivo ha cumplido el número máximo de usos permitidos y debe desecharse."
+        elif cantidad_usos == numero_reusos_permitida - 1:
+            mensaje = "El dispositivo le falta un solo uso permitido."
+        else:
+            mensaje = "¡Esterilización de equipo guardada con éxito!"
+
         # Retornar redirección si no hay alerta
-        return jsonify({'success': True, 'redirect_url': url_for('equipo_esterilizado', 
+        return jsonify({'success': True, 'mensaje': mensaje, 'redirect_url': url_for('equipo_esterilizado', 
                                  identificacion_dm=identificacion_dm, 
                                  lote=lote, nombre_dm=nombre_dm, 
                                  persona_esteriliza=persona_esteriliza, 

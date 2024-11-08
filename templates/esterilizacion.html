@@ -124,14 +124,23 @@
                     </div>
                 </div>
 
-                <!-- Ventana emergente para la alerta de última esterilización -->
-                <div id="alerta-esterilizacion-modal" class="modal">
+                <!-- Ventana emergente para advertir de que falta un solo uso -->
+                <div id="ultimo-uso-modal" class="modal">
+                    <div class="modal-content">
+                        <h2>¡Advertencia!</h2>
+                        <p>El dispositivo le falta un solo uso permitido.</p>
+                        <button id="modal-ultimo-uso-ok-btn" class="submit-btn">OK</button>
+                    </div>
+                </div>
+
+                <!-- Ventana emergente para el límite de uso alcanzado -->
+                <div id="limite-uso-modal" class="modal">
                     <div class="modal-content">
                         <h2>¡Alerta!</h2>
-                        <p>El dispositivo ha alcanzado el límite de Usos permitidas. Después de esta esterilización, debe desecharse.</p>
-                        <button id="modal-alerta-ok-btn" class="submit-btn">OK</button>
+                        <p>El dispositivo ha cumplido el número máximo de usos permitidos y debe desecharse.</p>
+                        <button id="modal-limite-uso-ok-btn" class="submit-btn">OK</button>
                     </div>
-                </div> 
+                </div>
 
             </form>
         </div>
@@ -170,65 +179,67 @@
 
     <!-- Script para manejar la lógica de las ventanas emergentes -->
     <script>
-        document.querySelector('form').addEventListener('submit', function(event) {
-            event.preventDefault();  // Evitar el envío por defecto del formulario
-            
-            fetch("{{ url_for('procesar_esterilizacion') }}", {
-                method: 'POST',
-                body: new FormData(this)
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Verificar si se ha alcanzado el límite de esterilización
-                if (data.alerta_limpieza) {
-                    // Mostrar la ventana de alerta
-                    document.getElementById('alerta-esterilizacion-modal').style.display = 'block';
-                    
-                    // Guardar la URL para redirigir después de cerrar la alerta
-                    const redirectUrl = data.redirect_url;
-                    document.getElementById('modal-alerta-ok-btn').setAttribute('data-redirect-url', redirectUrl);
-                    
-                    return;  // Detener la ejecución para evitar mostrar la ventana de éxito
-                }
+       document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault();  // Evitar el envío por defecto del formulario
+        
+        fetch("{{ url_for('procesar_esterilizacion') }}", {
+            method: 'POST',
+            body: new FormData(this)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                const mensaje = data.mensaje;
+                const redirectUrl = data.redirect_url;  // URL dinámica desde el backend
 
-                // Mostrar la ventana emergente de éxito si no se alcanzó el límite
-                if (data.success) {
-                    document.getElementById('success-modal').style.display = 'block';
-                    document.getElementById('modal-ok-btn').setAttribute('data-redirect-url', data.redirect_url);
+                if (mensaje === "El dispositivo le falta un solo uso permitido.") {
+                    // Mostrar advertencia de que solo queda un uso permitido
+                    document.getElementById('ultimo-uso-modal').style.display = 'block';
+                    // Almacenar la URL de redirección en el botón OK
+                    document.getElementById('modal-ultimo-uso-ok-btn').setAttribute('data-redirect-url', redirectUrl);
+                } else if (mensaje === "El dispositivo ha cumplido el número máximo de usos permitidos y debe desecharse.") {
+                    // Mostrar alerta de límite de uso alcanzado
+                    document.getElementById('limite-uso-modal').style.display = 'block';
+                    // Almacenar la URL de redirección en el botón OK
+                    document.getElementById('modal-limite-uso-ok-btn').setAttribute('data-redirect-url', redirectUrl);
                 } else {
-                    alert('Error: ' + data.message);
+                    // Mostrar la ventana emergente de éxito
+                    document.getElementById('success-modal').style.display = 'block';
+                    // Almacenar la URL de redirección en el botón OK
+                    document.getElementById('modal-ok-btn').setAttribute('data-redirect-url', redirectUrl);
                 }
-            })
-            .catch(error => console.error('Error:', error));
-        });
-
-        // Manejar el clic en el botón "OK" de la alerta
-        document.getElementById('modal-alerta-ok-btn').addEventListener('click', function() {
-            // Cerrar el modal de alerta
-            document.getElementById('alerta-esterilizacion-modal').style.display = 'none';
-
-            // Obtener la URL de redirección desde el atributo del botón
-            const redirectUrl = this.getAttribute('data-redirect-url');
-            
-            // Redirigir a la URL almacenada
-            if (redirectUrl) {
-                window.location.href = redirectUrl;
+            } else {
+                alert('Error: ' + data.message);
             }
-        });
+        })
+        .catch(error => console.error('Error:', error));
+    });
 
-        // Manejar el clic en el botón "OK" de la ventana de éxito
-        document.getElementById('modal-ok-btn').addEventListener('click', function() {
-            // Cerrar el modal de éxito
-            document.getElementById('success-modal').style.display = 'none';
+    // Cerrar las ventanas emergentes al hacer clic en "OK" y redirigir a la URL correspondiente
+    document.getElementById('modal-ok-btn').addEventListener('click', function() {
+        document.getElementById('success-modal').style.display = 'none';
+        const redirectUrl = this.getAttribute('data-redirect-url');  // Obtener la URL dinámica
+        if (redirectUrl) {
+            window.location.href = redirectUrl;
+        }
+    });
 
-            // Obtener la URL de redirección desde el atributo del botón
-            const redirectUrl = this.getAttribute('data-redirect-url');
+    document.getElementById('modal-ultimo-uso-ok-btn').addEventListener('click', function() {
+        document.getElementById('ultimo-uso-modal').style.display = 'none';
+        const redirectUrl = this.getAttribute('data-redirect-url');  // Obtener la URL dinámica
+        if (redirectUrl) {
+            window.location.href = redirectUrl;
+        }
+    });
 
-            // Redirigir a la URL almacenada
-            if (redirectUrl) {
-                window.location.href = redirectUrl;
-            }
-        });
+    document.getElementById('modal-limite-uso-ok-btn').addEventListener('click', function() {
+        document.getElementById('limite-uso-modal').style.display = 'none';
+        const redirectUrl = this.getAttribute('data-redirect-url');  // Obtener la URL dinámica
+        if (redirectUrl) {
+            window.location.href = redirectUrl;
+        }
+    });
+
     </script>
 
 
