@@ -43,9 +43,15 @@
             </div>
             {% endif %}
             <div class="team-info-container">
-                <!-- Imagen del equipo -->
+                <!-- Imagen -->
                 <div class="image-container">
-                    <img src="{{ url_for('static', filename='equipment.png') }}" alt="Imagen del equipo" class="equipment-image">
+                    {% if identificacion_dm + '.png' in available_images %}
+                        <img src="{{ url_for('static', filename='device_images/' + identificacion_dm + '.png') }}" 
+                             alt="Imagen del equipo" class="equipment-image">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='device_images/default.png') }}" 
+                             alt="Imagen no disponible" class="equipment-image">
+                    {% endif %}
                 </div>
                 <!-- Tabla de información -->
                 <div class="info-table">

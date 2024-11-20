@@ -1,4 +1,4 @@
-﻿identificacion,lote,nombre_dm,fabricante,dispositivo_medico,numero_reusos,numero_esterilizacion,metodo_esterilizacion,fecha_compra
+﻿identificación,lote,nombre DM,fabricante,dispositivo médico,número de reusos,numero de esterilización,método de esterilizacion,fecha de compra
 AF-411-14,m,Pinza de disecciÃ³n y ligadura Adson-Baby,SURTEX,Pinza,4,3,Esterilizacion por Autoclave,02/04/2024
 TR-091-20,m,Tubo de succiÃ³n Adson,SURTEX,Tubo,3,4,Esterilizacion por Autoclave,03/04/2024
 AF-268-18,m,Pinza de arteria Adson,SURTEX,Pinza,2,7,Esterilizacion por Autoclave,04/04/2024

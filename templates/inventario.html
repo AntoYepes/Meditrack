@@ -35,46 +35,102 @@
     </aside>
 
     <main class="content">
-        <section class="upload-section">
-            <h2>Inventario de Dispositivos Médicos</h2>
-            <p>Carga un archivo CSV con los detalles del inventario.</p>
-            <p>El CSV debe contar con las siguientes columnas: <strong>identificación</strong>, <strong>lote</strong>, <strong>nombre DM</strong>, <strong>fabricante</strong>, <strong>dispositivo médico</strong>, <strong>número de reusos</strong>, <strong>número de esterilización</strong>, <strong>método de esterilización</strong>, <strong>fecha compra</strong>, <strong>cantidad de piezas</strong>, <strong>esterilizador</strong>, <strong>fecha de vencimiento</strong>.</p>
+        <!-- Contenedor para la sección de cargar documentos -->
+        <section class="csv-section">
+            <div class="download-template">
+                <h2>Descargar Plantilla</h2>
+                <p>
+                    Descarga la plantilla necesaria para cargar los detalles del inventario. Completa el archivo con la información requerida y asegúrate de guardarlo en formato CSV antes de cargarlo.
+                </p>
+                <a href="{{ url_for('static', filename='plantilla_inventario.csv') }}" download>
+                    <button class="btn btn-primary">Descargar Plantilla</button>
+                </a>
+            </div>
 
-            <form id="uploadForm" action="{{ url_for('inventario') }}" method="POST" enctype="multipart/form-data">
-                <input type="file" name="csv_file" accept=".csv">
-                <button type="submit" class="btn">Cargar CSV</button>
-            </form>
-        </section>
+            <hr> <!-- Línea divisoria -->
 
-        <!-- Sección de gráficos -->
-        {% if graph_path_histogram and graph_path_pie %}
-        <section class="inventory-graph">
-            <h2>Resumen de Inventario</h2>
-            <div class="graph-container">
-                <div class="graph-item">
-                    <h3>Cantidad de dispositivos por tipo</h3>
-                    <img src="{{ url_for('static', filename='histogram.png') }}" alt="Histograma de Inventario">
-                </div>
-                <div class="graph-item">
-                    <h3>Distribución de dispositivos</h3>
-                    <img src="{{ url_for('static', filename='pie_chart.png') }}" alt="Diagrama de Torta de Inventario">
-                </div>
-                {% if graph_path_pinzas %}
-                <section class="inventory-graph">
-                    <h2>Usos Actuales vs Usos Permitidos para Pinzas</h2>
-                    <div class="graph-container">
-                        <div class="graph-item">
-                            <img src="{{ url_for('static', filename='pinzas_uso_chart.png') }}" alt="Gráfico de Usos de Pinzas">
-                        </div>
+            <div class="upload-csv">
+                <h2>Cargar CSV</h2>
+                <p>
+                    Carga un archivo CSV con los detalles del inventario. Asegúrate de que el archivo contenga las siguientes columnas: 
+                    <strong>identificación</strong>, <strong>lote</strong>, <strong>nombre DM</strong>, <strong>fabricante</strong>, 
+                    <strong>dispositivo médico</strong>, <strong>número de reusos</strong>, <strong>número de esterilización</strong>, 
+                    <strong>método de esterilización</strong>, <strong>fecha compra</strong>, <strong>cantidad de piezas</strong>, 
+                    <strong>esterilizador</strong>, <strong>fecha de vencimiento</strong>.
+                </p>
+                <form id="uploadForm" action="{{ url_for('inventario') }}" method="POST" enctype="multipart/form-data" class="upload-form">
+                    <div class="file-upload">
+                        <label for="csv_file" class="file-label">Seleccionar archivo</label>
+                        <input type="file" id="csv_file" name="csv_file" accept=".csv">
                     </div>
-                </section>
-                {% endif %}
-
+                    <button type="submit" class="btn btn-primary">Cargar CSV</button>
+                </form>
             </div>
         </section>
+
+        <!-- Contenedor para la sección de gráficos -->
+    <section class="inventory-graph">
+        {% if graph_path_histogram and graph_path_pie %}
+        <h2>Resumen de Inventario</h2>
+        <div class="graph-container">
+            <div class="graph-item">
+                <h3>Cantidad de dispositivos por tipo</h3>
+                <img src="{{ url_for('static', filename='histogram.png') }}" alt="Histograma de Inventario">
+            </div>    
+        </div>
         {% else %}
         <p>No hay gráficos disponibles. Cargue un archivo CSV para ver los resultados.</p>
         {% endif %}
+    </section>
+   
+    
+    <section class="pinzas-graph">
+        {% if graph_path_pinzas %}
+        <h2>Usos Actuales vs Usos Permitidos para Pinzas</h2>
+        <div class="graph-container">
+            <div class="graph-item">
+                <img src="{{ url_for('static', filename='pinzas_uso_chart.png') }}" alt="Gráfico de Usos de Pinzas">
+            </div>
+        </div>
+        {% else %}
+        <p>No hay datos disponibles para las pinzas. Por favor, cargue un archivo CSV válido.</p>
+        {% endif %}
+    </section>
+
+    <section class="retractores-graph">
+        {% if graph_path_retractores %}
+        <h2>Usos Actuales vs Usos Permitidos para Retractores</h2>
+        <div class="graph-container">
+            <div class="graph-item">
+                <img src="{{ url_for('static', filename='retractores_uso_chart.png') }}" alt="Gráfico de Usos de Retractores">
+            </div>
+        </div>
+        {% endif %}
+    </section>
+
+    <section class="filtros-graph">
+        {% if graph_path_filtros %}
+        <h2>Usos Actuales vs Usos Permitidos para Filtros</h2>
+        <div class="graph-container">
+            <div class="graph-item">
+                <img src="{{ url_for('static', filename='filtros_uso_chart.png') }}" alt="Gráfico de Usos de Filtros">
+            </div>
+        </div>
+        {% endif %}
+    </section>
+
+    <section class="tiempo-transcurrido-graph">
+        {% if graph_path_tiempo %}
+        <h2>Tiempo Transcurrido desde la Compra hasta el Límite de Usos Permitidos</h2>
+        <div class="graph-container">
+            <div class="graph-item">
+                <img src="{{ url_for('static', filename='tiempo_transcurrido_chart.png') }}" alt="Gráfico de Tiempo Transcurrido">
+            </div>
+        </div>
+        {% endif %}
+    </section>
+    
+    
         <!-- Modal para mostrar mensaje de éxito -->
         <div id="successModal" class="modal">
             <div class="modal-content">

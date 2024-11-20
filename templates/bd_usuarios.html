@@ -36,17 +36,60 @@
     </aside>
 
     <main class="content">
+        <!--
         <section class="upload-section">
             <h2>Bienvenido</h2>
             <p>Carga el CSV con los usuarios que manejarán este software.</p>
             <p>El CSV debe contar con 3 columnas: <strong>usuario</strong>, <strong>contraseña</strong>, <strong>rol</strong>.</p>
-            
-            <!-- Formulario para cargar el archivo CSV -->
+             Descargar plantilla
+            <div>
+                <h3>Descargar Plantilla</h3>
+                <a href="{{ url_for('static', filename='plantilla_usuarios.csv') }}" download>
+                    <button class="btn btn-primary">Descargar Plantilla</button>
+                </a>
+            </div>
+             Formulario para cargar el archivo CSV 
             <form action="{{ url_for('bd_usuarios') }}" method="POST" enctype="multipart/form-data">
                 <input type="file" name="csv_file" accept=".csv">
                 <button type="submit">Cargar CSV</button>
             </form>
         </section>
+        <div>
+    -->
+    <div class="csv-section">
+        <div class="csv-section">
+            <!-- Sección para Descargar Plantilla -->
+            <div class="download-template">
+                <h2>Descargar Plantilla</h2>
+                <p>
+                    Descarga la plantilla necesaria para cargar los usuarios que manejarán este software. 
+                    Completa el archivo con la información requerida y asegúrate de guardarlo en formato CSV antes de cargarlo.
+                </p>
+                <a href="{{ url_for('static', filename='plantilla_usuarios.csv') }}" download>
+                    <button class="btn btn-primary">Descargar Plantilla</button>
+                </a>
+            </div>
+        
+            <hr> <!-- Línea divisoria para separar secciones -->
+        
+            <!-- Sección para Cargar CSV -->
+            <div class="upload-csv">
+                <h2>Cargar CSV</h2>
+                <p>
+                    Carga el archivo CSV completado con los datos de los usuarios. 
+                    Asegúrate de que el archivo contenga las siguientes columnas: <b>usuario, contraseña, rol</b>.
+                </p>
+                <form method="POST" enctype="multipart/form-data" class="upload-form">
+                    <div class="file-upload">
+                        <label for="csv_file" class="file-label">Seleccionar archivo</label>
+                        <input type="file" id="csv_file" name="csv_file" accept=".csv">
+                    </div>
+                    <button type="submit" class="btn btn-primary">Cargar CSV</button>
+                </form>
+            </div>
+        </div>
+        
+    
     </main>
 
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>

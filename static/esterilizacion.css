@@ -248,3 +248,42 @@ header {
     width: 95%;
     margin: 0 auto;
 }
+
+.equipment-image {
+    border: 2px solid #ddd; /* Borde de la imagen */
+    border-radius: 10px; /* Bordes redondeados */
+    width: 150px; /* Ancho fijo */
+    height: 150px; /* Alto fijo */
+    object-fit: cover; /* Asegura que la imagen mantenga proporciones */
+    display: block; /* Centra la imagen */
+    margin: auto; /* Espaciado automático */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra para darle profundidad */
+}
+
+.image-container {
+    text-align: center; /* Centra el contenido dentro del contenedor */
+    padding: 10px; /* Espaciado interno */
+    background-color: #f9f9f9; /* Fondo claro para contraste */
+    border-radius: 12px; /* Bordes redondeados del contenedor */
+    border: 1px solid #ccc; /* Borde del contenedor */
+    width: fit-content; /* Ajusta el tamaño al contenido */
+    margin: auto; /* Centra el contenedor */
+}
+
+#ultimo-uso-modal .modal-content h2 {
+    color: rgb(255, 145, 0); /* Cambia el color del título de esta ventana a rojo */
+    font-weight: bold; /* Resalta el texto */
+    text-align: center; /* Centra el texto */
+}
+
+#limite-uso-modal .modal-content h2 {
+    color: red; /* Cambia el color del título de esta ventana a rojo */
+    font-weight: bold; /* Resalta el texto */
+    text-align: center; /* Centra el texto */
+}
+
+#Supero-uso-modal .modal-content h2 {
+    color: red; /* Cambia el color del título de esta ventana a rojo */
+    font-weight: bold; /* Resalta el texto */
+    text-align: center; /* Centra el texto */
+}

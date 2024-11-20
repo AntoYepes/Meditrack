@@ -237,44 +237,209 @@ def inventario():
     ''', conn_esterilizacion)
     conn_esterilizacion.close()
 
+    # Query inventory.db for allowed uses (numero_reusos)
+    conn_inventory = sqlite3.connect('inventory.db')
+    retractores_inventory_data = pd.read_sql_query('''
+        SELECT identificacion, nombre_dm, numero_reusos
+        FROM inventory
+        WHERE dispositivo_medico LIKE '%Retractor%'
+    ''', conn_inventory)
+    conn_inventory.close()
+
+    # Query esterilizacion.db for current uses (cantidad_usos)
+    conn_esterilizacion = sqlite3.connect('esterilizacion.db')
+    retractores_esterilizacion_data = pd.read_sql_query('''
+        SELECT identificacion_dm AS identificacion, nombre_dm, cantidad_usos
+        FROM esterilizacion
+        WHERE nombre_dm LIKE '%Retractor%'
+    ''', conn_esterilizacion)
+    conn_esterilizacion.close()
+
+    # Query inventory.db for allowed uses (numero_reusos)
+    conn_inventory = sqlite3.connect('inventory.db')
+    filtros_inventory_data = pd.read_sql_query('''
+        SELECT identificacion, nombre_dm, numero_reusos
+        FROM inventory
+        WHERE dispositivo_medico LIKE '%Filtro%'
+    ''', conn_inventory)
+    conn_inventory.close()
+
+    # Query esterilizacion.db for current uses (cantidad_usos)
+    conn_esterilizacion = sqlite3.connect('esterilizacion.db')
+    filtros_esterilizacion_data = pd.read_sql_query('''
+        SELECT identificacion_dm AS identificacion, nombre_dm, cantidad_usos
+        FROM esterilizacion
+        WHERE nombre_dm LIKE '%Filtro%'
+    ''', conn_esterilizacion)
+    conn_esterilizacion.close()
+
+    # Obtener la fecha de compra de cada dispositivo
+    # Cargar los datos de las bases de datos
+    conn_inventory = sqlite3.connect('inventory.db')
+    inventory_data = pd.read_sql_query('''
+        SELECT identificacion, fecha_compra, numero_reusos, nombre_dm
+        FROM inventory
+    ''', conn_inventory)
+    conn_inventory.close()
+
+    conn_esterilizacion = sqlite3.connect('esterilizacion.db')
+    esterilizacion_data = pd.read_sql_query('''
+        SELECT identificacion_dm, fecha, cantidad_usos
+        FROM esterilizacion
+    ''', conn_esterilizacion)
+    conn_esterilizacion.close()
+
     # Merge the two datasets on 'identificacion' to combine allowed and current uses
     pinzas_data = pd.merge(pinzas_inventory_data, pinzas_esterilizacion_data, on='identificacion', how='inner', suffixes=('_inventory', '_esterilizacion'))
+
+    # Merge the two datasets on 'identificacion' to combine allowed and current uses
+    retractores_data = pd.merge(retractores_inventory_data, retractores_esterilizacion_data, on='identificacion', how='inner', suffixes=('_inventory', '_esterilizacion'))
+
+    # Merge the two datasets on 'identificacion' to combine allowed and current uses
+    filtros_data = pd.merge(filtros_inventory_data, filtros_esterilizacion_data, on='identificacion', how='inner', suffixes=('_inventory', '_esterilizacion'))
+
+    # Combinar datos basados en identificacion_dm e identificacion
+    merged_data = pd.merge(
+        esterilizacion_data,
+        inventory_data,
+        left_on='identificacion_dm',
+        right_on='identificacion',
+        how='inner'
+    )
+
+    # Nota: Este filtro requiere que ya sepas o tengas una columna `numero_reusos`
+    merged_data['fecha'] = pd.to_datetime(merged_data['fecha'], errors='coerce')
+    merged_data['fecha_compra'] = pd.to_datetime(merged_data['fecha_compra'], errors='coerce')
+
+    # Calcular la diferencia en días
+    merged_data['dias_transcurridos'] = (merged_data['fecha'] - merged_data['fecha_compra']).dt.days
 
     # Debug: Print columns of merged DataFrame to check names
     print("Columns in pinzas_data after merge:", pinzas_data.columns)
 
     # Use the correct column names from the merged DataFrame
+    # Crear un gráfico acumulativo para Usos Actuales vs Permitidos
     if not pinzas_data.empty:
-        # Plot "pinzas" current vs allowed uses
-  # Ajustar el tamaño de la figura
-        plt.figure(figsize=(12, 8))
-
-        # Configurar el gráfico de barras para los usos actuales
-        sns.barplot(x=pinzas_data['nombre_dm_inventory'], y=pinzas_data['cantidad_usos'], color='skyblue', label='Usos Actuales', ci=None)
-
-        # Configurar la línea de puntos para los usos permitidos
-        plt.plot(pinzas_data['nombre_dm_inventory'], pinzas_data['numero_reusos'], color='red', marker='o', linestyle='--', label='Usos Permitidos')
+        # Establecer colores y dimensiones
+        plt.figure(figsize=(10, 6))
+        
+        # Crear barras base para usos permitidos con menor altura
+        plt.barh(pinzas_data['nombre_dm_inventory'], pinzas_data['numero_reusos'], 
+                color='#e0e0e0', label='Usos Permitidos', height=0.5)
+        
+        # Crear barras superpuestas para usos actuales con menor altura
+        plt.barh(pinzas_data['nombre_dm_inventory'], pinzas_data['cantidad_usos'], 
+                color='#0077bc', label='Usos Actuales', height=0.5)
 
         # Personalizar etiquetas y leyenda
         plt.title('Usos Actuales vs Usos Permitidos para Pinzas', fontsize=16, fontweight='bold')
-        plt.xlabel('Pinzas', fontsize=14)
-        plt.ylabel('Número de Usos', fontsize=14)
-        plt.xticks(rotation=45, ha='right', fontsize=10)
+        plt.xlabel('Número de Usos', fontsize=14)
+        plt.ylabel('Pinzas', fontsize=14)
+        plt.xticks(fontsize=12)
+        plt.yticks(fontsize=10)
         plt.legend(fontsize=12)
 
-        # Ajustar el espaciado
+        # Ajustar espaciado y guardar gráfico
         plt.tight_layout()
-
-        # Guardar el gráfico
         graph_path_pinzas = os.path.join('static', 'pinzas_uso_chart.png')
         plt.savefig(graph_path_pinzas)
         plt.close()
 
+    # Use the correct column names from the merged DataFrame
+    if not retractores_data.empty:
+        # Plot "retractores" current vs allowed uses
+        plt.figure(figsize=(10, 6))
+
+        # Create base bars for allowed uses
+        plt.barh(retractores_data['nombre_dm_inventory'], retractores_data['numero_reusos'], 
+                color='#e0e0e0', label='Usos Permitidos', height=0.5)
+        
+        # Overlay bars for current uses
+        plt.barh(retractores_data['nombre_dm_inventory'], retractores_data['cantidad_usos'], 
+                color='#0077bc', label='Usos Actuales', height=0.5)
+
+        # Customize labels and legend
+        plt.title('Usos Actuales vs Usos Permitidos para Retractores', fontsize=16, fontweight='bold')
+        plt.xlabel('Número de Usos', fontsize=14)
+        plt.ylabel('Retractores', fontsize=14)
+        plt.xticks(fontsize=12)
+        plt.yticks(fontsize=10)
+        plt.legend(fontsize=12)
+
+        # Adjust spacing and save the graph
+        plt.tight_layout()
+        graph_path_retractores = os.path.join('static', 'retractores_uso_chart.png')
+        plt.savefig(graph_path_retractores)
+        plt.close()
+    else:
+        graph_path_retractores = None
+
+    # Use the correct column names from the merged DataFrame
+    if not filtros_data.empty:
+        # Plot "filtros" current vs allowed uses
+        plt.figure(figsize=(10, 6))
+
+        # Create base bars for allowed uses
+        plt.barh(filtros_data['nombre_dm_inventory'], filtros_data['numero_reusos'], 
+                color='#e0e0e0', label='Usos Permitidos', height=0.5)
+        
+        # Overlay bars for current uses
+        plt.barh(filtros_data['nombre_dm_inventory'], filtros_data['cantidad_usos'], 
+                color='#0077bc', label='Usos Actuales', height=0.5)
+
+        # Customize labels and legend
+        plt.title('Usos Actuales vs Usos Permitidos para Filtros', fontsize=16, fontweight='bold')
+        plt.xlabel('Número de Usos', fontsize=14)
+        plt.ylabel('Filtros', fontsize=14)
+        plt.xticks(fontsize=12)
+        plt.yticks(fontsize=10)
+        plt.legend(fontsize=12)
+
+        # Adjust spacing and save the graph
+        plt.tight_layout()
+        graph_path_filtros = os.path.join('static', 'filtros_uso_chart.png')
+        plt.savefig(graph_path_filtros)
+        plt.close()
+    else:
+        graph_path_filtros = None
+
+    # Calcular la diferencia en días entre fecha_compra y fecha
+    # Asegurarse de que 'numero_reusos' está disponible y correcto
+    if 'numero_reusos' in merged_data.columns:
+        # Filtrar datos donde cantidad_usos es igual al número máximo de usos permitidos
+        merged_data = merged_data[merged_data['cantidad_usos'] == merged_data['numero_reusos']]
+    elif 'numero_reusos_inventory' in merged_data.columns:
+        # Ajustar si la columna tiene un prefijo
+        merged_data = merged_data[merged_data['cantidad_usos'] == merged_data['numero_reusos_inventory']]
+    else:
+        raise ValueError("La columna 'numero_reusos' no está disponible en los datos combinados.")
+
+
+    # Asegúrate de que 'nombre_dm' contenga los nombres de los dispositivos médicos
+    if 'nombre_dm' in merged_data.columns:
+        # Crear el gráfico de barras horizontales con nombres en el eje Y
+        plt.figure(figsize=(10, 6))
+        plt.barh(merged_data['nombre_dm'], merged_data['dias_transcurridos'], color='skyblue')
+        plt.title('Tiempo Transcurrido desde la Compra hasta el Límite de Usos Permitidos', fontsize=16)
+        plt.xlabel('Días Transcurridos', fontsize=14)
+        plt.ylabel('Dispositivo Médico', fontsize=14)
+        plt.tight_layout()
+
+        # Guardar el gráfico
+        graph_path_tiempo = os.path.join('static', 'tiempo_transcurrido_chart.png')
+        plt.savefig(graph_path_tiempo)
+        plt.close()
+    else:
+        print("La columna 'nombre_dm' no está disponible en el DataFrame.")
+
+
     return render_template('inventario.html', success=success, 
                            graph_path_histogram=graph_path_histogram, 
                            graph_path_pie=graph_path_pie,
-                           graph_path_pinzas=graph_path_pinzas)
-
+                           graph_path_pinzas=graph_path_pinzas,
+                           graph_path_retractores=graph_path_retractores,
+                           graph_path_filtros=graph_path_filtros,
+                           graph_path_tiempo=graph_path_tiempo)
 
 
 # Ruta para esterilizacion
@@ -443,7 +608,11 @@ def equipo_esterilizado():
     cantidad_usos = request.args.get('cantidad_usos')
     numero_reusos_permitida = request.args.get('numero_reusos_permitida')
 
-    return render_template('equipo_esterilizado.html', identificacion_dm=identificacion_dm, 
+    # Listar imágenes disponibles en la carpeta
+    image_folder = os.path.join(app.static_folder, 'device_images')
+    available_images = [f for f in os.listdir(image_folder) if f.endswith('.png')]
+
+    return render_template('equipo_esterilizado.html', identificacion_dm=identificacion_dm, available_images=available_images,
                            persona_esteriliza=persona_esteriliza, fecha=fecha, hora=hora, 
                            ciclos=ciclos, cantidad_piezas=cantidad_piezas, esterilizador=esterilizador,
                            fecha_vencimiento=fecha_vencimiento, lote=lote, nombre_dm=nombre_dm,
